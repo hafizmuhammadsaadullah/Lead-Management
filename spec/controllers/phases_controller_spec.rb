@@ -6,13 +6,51 @@ RSpec.describe PhasesController, type: :controller do
   before do
     sign_in user
   end
+  describe '#index' do
+    context 'when the user is admin' do
+      let(:user) { FactoryGirl.create(:admin) }
+      let(:lead) { FactoryGirl.create(:lead, user_id: user.id) }
+      it 'allow admin to view all phase' do
+        get :index, params: { lead_id: lead.id }
+        expect(response).to have_http_status(200)
+        expect(response).to render_template 'index'
+      end
+    end
+    context 'when the user is business_developer' do
+      let(:user) { FactoryGirl.create(:business_developer) }
+      let(:lead) { FactoryGirl.create(:lead, user_id: user.id) }
+      it 'allow business_developer to view all requests' do
+        get :index, params: { lead_id: lead.id }
+        expect(response).to have_http_status(200)
+        expect(response).to render_template 'index'
+      end
+    end
+    context 'when the user is manager' do
+      let(:user) { FactoryGirl.create(:manager) }
+      let(:lead) { FactoryGirl.create(:lead, user_id: user.id) }
+      it 'allow manager to view all requests' do
+        get :index, params: { lead_id: lead.id }
+        expect(response).to have_http_status(200)
+        expect(response).to render_template 'index'
+      end
+    end
+    context 'when the user is engineer' do
+      let(:user) { FactoryGirl.create(:engineer) }
+      let(:lead) { FactoryGirl.create(:lead, user_id: user.id) }
+      it 'allow engineer  to view all requests' do
+        get :index, params: { lead_id: lead.id }
+        expect(response).to have_http_status(200)
+        expect(response).to render_template 'index'
+      end
+    end
+  end
   describe '#new' do
     context 'when the user is admin' do
       let(:user) { FactoryGirl.create(:admin) }
       let(:lead) { FactoryGirl.create(:lead, user_id: user.id) }
       it 'allow admin to create new phase' do
         get :new, params: { lead_id: lead.id }
-        expect(response).to be_success
+        expect(response).to have_http_status(200)
         expect(response).to render_template 'new'
       end
     end
@@ -21,7 +59,7 @@ RSpec.describe PhasesController, type: :controller do
       let(:lead) { FactoryGirl.create(:lead, user_id: user.id) }
       it 'allow Bussiness Developer to create new phase' do
         get :new, params: { lead_id: lead.id }
-        expect(response).to be_success
+        expect(response).to have_http_status(200)
         expect(response).to render_template 'new'
       end
     end
@@ -140,7 +178,7 @@ RSpec.describe PhasesController, type: :controller do
       let(:phase) { FactoryGirl.create(:phase, user_id: user.id, lead_id: lead.id) }
       it 'allow admin to edit phase' do
         get :edit, params: { lead_id: lead.id, id: phase.id }
-        expect(response).to be_success
+        expect(response).to have_http_status(200)
         expect(response).to render_template 'edit'
       end
     end
@@ -150,7 +188,7 @@ RSpec.describe PhasesController, type: :controller do
       let(:phase) { FactoryGirl.create(:phase, user_id: user.id, lead_id: lead.id) }
       it 'allow Bussiness Developer to edit phase' do
         get :edit, params: { lead_id: lead.id, id: phase.id }
-        expect(response).to be_success
+        expect(response).to have_http_status(200)
         expect(response).to render_template 'edit'
       end
     end
@@ -231,7 +269,7 @@ RSpec.describe PhasesController, type: :controller do
       let(:request) { FactoryGirl.create(:request, user_id: user.id, phase_id: phase.id) }
       it 'allow admin to update status' do
         get :status, params: { phase_id: phase.id }
-        expect(response).to be_success
+        expect(response).to have_http_status(200)
       end
     end
 
@@ -242,7 +280,7 @@ RSpec.describe PhasesController, type: :controller do
       let(:request) { FactoryGirl.create(:request, user_id: user.id, phase_id: phase.id) }
       it 'allow Bussiness Developer to update  status' do
         get :status, params: { phase_id: phase.id }
-        expect(response).to be_success
+        expect(response).to have_http_status(200)
       end
     end
 
@@ -253,7 +291,7 @@ RSpec.describe PhasesController, type: :controller do
       let(:request) { FactoryGirl.create(:request, user_id: user.id, phase_id: phase.id) }
       it 'do not allow Manager to update  status' do
         get :status, params: { phase_id: phase.id }
-        expect(response).to be_success
+        expect(response).to have_http_status(200)
       end
     end
 
@@ -361,7 +399,7 @@ RSpec.describe PhasesController, type: :controller do
       end
     end
   end
-  describe '#reject' do
+  describe 'get#reject' do
     context 'when the user is admin' do
       let(:user) { FactoryGirl.create(:admin) }
       let(:lead) { FactoryGirl.create(:lead, user_id: user.id) }
@@ -369,7 +407,7 @@ RSpec.describe PhasesController, type: :controller do
       let(:request) { FactoryGirl.create(:request, user_id: user.id, phase_id: phase.id) }
       it 'do not allow admin to reject request' do
         get :reject, params: { phase_id: phase.id, id: user.id, request: request }
-        expect(response).to be_success
+        expect(flash[:error]).to eq('translation missing: en.pundit.You are not authorize to do this action')
       end
     end
 
@@ -380,7 +418,7 @@ RSpec.describe PhasesController, type: :controller do
       let(:request) { FactoryGirl.create(:request, user_id: user.id, phase_id: phase.id) }
       it 'do not allow Bussiness Developer to reject request' do
         get :reject, params: { phase_id: phase.id, id: user.id }
-        expect(response).to be_success
+        expect(flash[:error]).to eq('translation missing: en.pundit.You are not authorize to do this action')
       end
     end
 
@@ -391,7 +429,7 @@ RSpec.describe PhasesController, type: :controller do
       let(:request) { FactoryGirl.create(:request, user_id: user.id, phase_id: phase.id) }
       it 'allow manager to reject request' do
         get :reject, params: { phase_id: phase.id, id: user.id }
-        expect(response).to be_success
+        expect(response).to have_http_status(302)
       end
     end
 
@@ -402,7 +440,52 @@ RSpec.describe PhasesController, type: :controller do
       let(:request) { FactoryGirl.create(:request, user_id: user.id, phase_id: phase.id) }
       it 'do not allow engineer to reject request' do
         get :reject, params: { phase_id: phase.id, id: user.id }
-        expect(response).to be_success
+        expect(flash[:error]).to eq('translation missing: en.pundit.You are not authorize to do this action')
+      end
+    end
+  end
+  describe 'post#reject' do
+    context 'when the user is admin' do
+      let(:user) { FactoryGirl.create(:admin) }
+      let(:lead) { FactoryGirl.create(:lead, user_id: user.id) }
+      let(:phase) { FactoryGirl.create(:phase, user_id: user.id, lead_id: lead.id) }
+      let(:request) { FactoryGirl.create(:request, user_id: user.id, phase_id: phase.id) }
+      it 'do not allow admin to reject request' do
+        post :reject, params: { phase_id: phase.id, id: user.id, request: request, text: 'dadwda' }
+        expect(flash[:error]).to eq('translation missing: en.pundit.You are not authorize to do this action')
+      end
+    end
+
+    context 'when the user is Bussiness Developer' do
+      let(:user) { FactoryGirl.create(:business_developer) }
+      let(:lead) { FactoryGirl.create(:lead, user_id: user.id) }
+      let(:phase) { FactoryGirl.create(:phase, user_id: user.id, lead_id: lead.id) }
+      let(:request) { FactoryGirl.create(:request, user_id: user.id, phase_id: phase.id) }
+      it 'do not allow Bussiness Developer to reject request' do
+        post :reject, params: { phase_id: phase.id, id: user.id, request: request, text: 'dadwda' }
+        expect(flash[:error]).to eq('translation missing: en.pundit.You are not authorize to do this action')
+      end
+    end
+
+    context 'when the user is Manager' do
+      let(:user) { FactoryGirl.create(:manager) }
+      let(:lead) { FactoryGirl.create(:lead, user_id: user.id) }
+      let(:phase) { FactoryGirl.create(:phase, user_id: user.id, lead_id: lead.id) }
+      let(:request) { FactoryGirl.create(:request, user_id: user.id, phase_id: phase.id) }
+      it 'allow manager to reject request' do
+        post :reject, params: { phase_id: phase.id, id: user.id, request: request, text: 'dadwda' }
+        expect(flash[:notice]).to eq('Thanks')
+      end
+    end
+
+    context 'when the user is Engineer' do
+      let(:user) { FactoryGirl.create(:engineer) }
+      let(:lead) { FactoryGirl.create(:lead, user_id: user.id) }
+      let(:phase) { FactoryGirl.create(:phase, user_id: user.id, lead_id: lead.id) }
+      let(:request) { FactoryGirl.create(:request, user_id: user.id, phase_id: phase.id) }
+      it 'do not allow engineer to reject request' do
+        post :reject, params: { phase_id: phase.id, id: user.id, request: request, text: 'dadwda' }
+        expect(flash[:error]).to eq('translation missing: en.pundit.You are not authorize to do this action')
       end
     end
   end

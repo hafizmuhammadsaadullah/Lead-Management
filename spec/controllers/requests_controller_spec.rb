@@ -14,7 +14,7 @@ RSpec.describe RequestsController, type: :controller do
       let(:user) { FactoryGirl.create(:admin) }
       it 'allow admin to view all requests' do
         get :index, params: { phase_id: phase.id }
-        expect(response).to have_http_status(status)
+        expect(response).to have_http_status(200)
         expect(response).to render_template 'index'
       end
     end
@@ -22,7 +22,7 @@ RSpec.describe RequestsController, type: :controller do
       let(:user) { FactoryGirl.create(:business_developer) }
       it 'allow business_developer to view all requests' do
         get :index, params: { phase_id: phase.id }
-        expect(response).to have_http_status(status)
+        expect(response).to have_http_status(200)
         expect(response).to render_template 'index'
       end
     end
@@ -30,7 +30,7 @@ RSpec.describe RequestsController, type: :controller do
       let(:user) { FactoryGirl.create(:manager) }
       it 'allow manager to view all requests' do
         get :index, params: { phase_id: phase.id }
-        expect(response).to have_http_status(status)
+        expect(response).to have_http_status(200)
         expect(response).to render_template 'index'
       end
     end
@@ -38,7 +38,7 @@ RSpec.describe RequestsController, type: :controller do
       let(:user) { FactoryGirl.create(:engineer) }
       it 'allow engineer  to view all requests' do
         get :index, params: { phase_id: phase.id }
-        expect(response).to have_http_status(status)
+        expect(response).to have_http_status(200)
         expect(response).to render_template 'index'
       end
     end
@@ -49,7 +49,7 @@ RSpec.describe RequestsController, type: :controller do
       let(:user) { FactoryGirl.create(:admin) }
       it 'allow admin to view request' do
         get :show, params: { phase_id: phase.id, id: request.id }
-        expect(response).to have_http_status(status)
+        expect(response).to have_http_status(200)
         expect(response).to render_template 'show'
       end
     end
@@ -57,7 +57,7 @@ RSpec.describe RequestsController, type: :controller do
       let(:user) { FactoryGirl.create(:business_developer) }
       it 'allow business_developer to view request' do
         get :show, params: { phase_id: phase.id, id: request.id }
-        expect(response).to have_http_status(status)
+        expect(response).to have_http_status(200)
         expect(response).to render_template 'show'
       end
     end
@@ -65,7 +65,7 @@ RSpec.describe RequestsController, type: :controller do
       let(:user) { FactoryGirl.create(:manager) }
       it 'allow manager to view request' do
         get :show, params: { phase_id: phase.id, id: request.id }
-        expect(response).to have_http_status(status)
+        expect(response).to have_http_status(200)
         expect(response).to render_template 'show'
       end
     end
@@ -73,7 +73,7 @@ RSpec.describe RequestsController, type: :controller do
       let(:user) { FactoryGirl.create(:engineer) }
       it 'allow engineer  to view request' do
         get :show, params: { phase_id: phase.id, id: request.id }
-        expect(response).to have_http_status(status)
+        expect(response).to have_http_status(200)
         expect(response).to render_template 'show'
       end
     end
@@ -83,7 +83,7 @@ RSpec.describe RequestsController, type: :controller do
       let(:user) { FactoryGirl.create(:admin) }
       it 'allow admin to create new request' do
         get :new, params: { phase_id: phase.id }
-        expect(response).to have_http_status(status)
+        expect(response).to have_http_status(200)
         expect(response).to render_template 'new'
       end
     end
@@ -91,7 +91,7 @@ RSpec.describe RequestsController, type: :controller do
       let(:user) { FactoryGirl.create(:business_developer) }
       it 'allow Bussiness Developer to create new request' do
         get :new, params: { phase_id: phase.id }
-        expect(response).to have_http_status(status)
+        expect(response).to have_http_status(200)
         expect(response).to render_template 'new'
       end
     end
@@ -119,6 +119,11 @@ RSpec.describe RequestsController, type: :controller do
         post :create, params: { phase_id: phase.id, request: request }
         expect(flash[:notice]).to eq('invitation send successfully')
       end
+      it 'validation' do
+        request = attributes_for(:request, user_id: nil)
+        post :create, params: { phase_id: phase.id, request: request }
+        expect(flash[:error]).to eq("Manager request  not create successfully,  User must exist and User can't be blank")
+      end
     end
     context 'when the user is Bussiness Developer' do
       let(:user) { FactoryGirl.create(:business_developer) }
@@ -126,6 +131,11 @@ RSpec.describe RequestsController, type: :controller do
         request = attributes_for(:request, user_id: user.id)
         post :create, params: { phase_id: phase.id, request: request }
         expect(flash[:notice]).to eq('invitation send successfully')
+      end
+      it 'validation' do
+        request = attributes_for(:request, user_id: nil)
+        post :create, params: { phase_id: phase.id, request: request }
+        expect(flash[:error]).to eq("Manager request  not create successfully,  User must exist and User can't be blank")
       end
     end
     context 'when the user is Manager' do

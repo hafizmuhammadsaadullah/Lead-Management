@@ -80,6 +80,7 @@ class PhasesController < ApplicationController
 
   def reject
     @phase = Phase.find_by(id: params[:phase_id])
+    authorize @phase
     @user = User.find_by(id: params[:id])
     return unless request.post?
 
@@ -102,10 +103,6 @@ class PhasesController < ApplicationController
 
   def phase_status_params
     params.require(:phase).permit(:status)
-  end
-
-  def phase_user_params
-    params.require(:phase).permit(:phase_id, :user_id, :description)
   end
 
   def set_lead
