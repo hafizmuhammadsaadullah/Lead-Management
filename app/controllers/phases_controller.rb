@@ -54,8 +54,8 @@ class PhasesController < ApplicationController
 
   def accept
     return unless User.exists?(id: params[:id])
-
     @phase = Phase.find_by(id: params[:phase_id])
+    authorize @phase
     ActiveRecord::Base.transaction do
       @phase.update!(user_id: params[:id])
       @request = @phase.requests.find_by(user_id: params[:id])
@@ -66,9 +66,10 @@ class PhasesController < ApplicationController
 
   def status
     @phase = Phase.find(params[:phase_id])
+    authorize @phase
     return unless request.post?
 
-    if @phase.update(phase_status_params)
+    if @phase.update!(phase_status_params)
       redirect_to lead_phases_path(@phase.lead_id), notice: 'Phase status change successfully'
     else
       flash[:error] = "Phase status not change successfully #{@phase.errors.full_messages.to_sentence}"

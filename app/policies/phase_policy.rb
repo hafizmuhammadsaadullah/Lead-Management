@@ -11,10 +11,18 @@ class PhasePolicy < ApplicationPolicy
   end
 
   def create?
-    user.admin? or  user.developer?
+    user.admin? and  user.developer?
   end
 
   def status?
-    user.admin? or (user.manager? and record.user_id == user.id)
+    user.admin? or (user.manager? and record.user_id == user.id) or (user.developer? and record.lead.user_id == user.id)
+  end
+
+  def accept?
+    user.manager? and record.requests.exists?(user_id: user.id)
+  end
+
+  def reject?
+    user.manager? and record.requests.exists?(user_id: user.id)
   end
 end
