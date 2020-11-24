@@ -30,8 +30,8 @@ class RequestsController < ApplicationController
 
   def destroy
     @request = Request.find_by(id: params[:id])
+    authorize @request
     if @request.destroy
-      authorize @request
       flash[:notice] = 'Manager request remove successfully'
     else
       flash[:error] = "Manager request  not remove successfully,  #{@request.errors.full_messages.to_sentence}"

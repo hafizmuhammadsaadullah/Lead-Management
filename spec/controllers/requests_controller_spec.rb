@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe RequestsController, type: :controller do
@@ -12,7 +14,7 @@ RSpec.describe RequestsController, type: :controller do
       let(:user) { FactoryGirl.create(:admin) }
       it 'allow admin to view all requests' do
         get :index, params: { phase_id: phase.id }
-        expect(response).to be_success
+        expect(response).to have_http_status(status)
         expect(response).to render_template 'index'
       end
     end
@@ -20,7 +22,7 @@ RSpec.describe RequestsController, type: :controller do
       let(:user) { FactoryGirl.create(:business_developer) }
       it 'allow business_developer to view all requests' do
         get :index, params: { phase_id: phase.id }
-        expect(response).to be_success
+        expect(response).to have_http_status(status)
         expect(response).to render_template 'index'
       end
     end
@@ -28,7 +30,7 @@ RSpec.describe RequestsController, type: :controller do
       let(:user) { FactoryGirl.create(:manager) }
       it 'allow manager to view all requests' do
         get :index, params: { phase_id: phase.id }
-        expect(response).to be_success
+        expect(response).to have_http_status(status)
         expect(response).to render_template 'index'
       end
     end
@@ -36,7 +38,7 @@ RSpec.describe RequestsController, type: :controller do
       let(:user) { FactoryGirl.create(:engineer) }
       it 'allow engineer  to view all requests' do
         get :index, params: { phase_id: phase.id }
-        expect(response).to be_success
+        expect(response).to have_http_status(status)
         expect(response).to render_template 'index'
       end
     end
@@ -47,7 +49,7 @@ RSpec.describe RequestsController, type: :controller do
       let(:user) { FactoryGirl.create(:admin) }
       it 'allow admin to view request' do
         get :show, params: { phase_id: phase.id, id: request.id }
-        expect(response).to be_success
+        expect(response).to have_http_status(status)
         expect(response).to render_template 'show'
       end
     end
@@ -55,7 +57,7 @@ RSpec.describe RequestsController, type: :controller do
       let(:user) { FactoryGirl.create(:business_developer) }
       it 'allow business_developer to view request' do
         get :show, params: { phase_id: phase.id, id: request.id }
-        expect(response).to be_success
+        expect(response).to have_http_status(status)
         expect(response).to render_template 'show'
       end
     end
@@ -63,7 +65,7 @@ RSpec.describe RequestsController, type: :controller do
       let(:user) { FactoryGirl.create(:manager) }
       it 'allow manager to view request' do
         get :show, params: { phase_id: phase.id, id: request.id }
-        expect(response).to be_success
+        expect(response).to have_http_status(status)
         expect(response).to render_template 'show'
       end
     end
@@ -71,7 +73,7 @@ RSpec.describe RequestsController, type: :controller do
       let(:user) { FactoryGirl.create(:engineer) }
       it 'allow engineer  to view request' do
         get :show, params: { phase_id: phase.id, id: request.id }
-        expect(response).to be_success
+        expect(response).to have_http_status(status)
         expect(response).to render_template 'show'
       end
     end
@@ -81,7 +83,7 @@ RSpec.describe RequestsController, type: :controller do
       let(:user) { FactoryGirl.create(:admin) }
       it 'allow admin to create new request' do
         get :new, params: { phase_id: phase.id }
-        expect(response).to be_success
+        expect(response).to have_http_status(status)
         expect(response).to render_template 'new'
       end
     end
@@ -89,7 +91,7 @@ RSpec.describe RequestsController, type: :controller do
       let(:user) { FactoryGirl.create(:business_developer) }
       it 'allow Bussiness Developer to create new request' do
         get :new, params: { phase_id: phase.id }
-        expect(response).to be_success
+        expect(response).to have_http_status(status)
         expect(response).to render_template 'new'
       end
     end
@@ -97,14 +99,14 @@ RSpec.describe RequestsController, type: :controller do
       let(:user) { FactoryGirl.create(:manager) }
       it 'do not allow Manager to create new request' do
         get :new, params: { phase_id: phase.id }
-        expect(flash[:error]).to be_present
+        expect(flash[:error]).to eq('translation missing: en.pundit.You are not authorize to do this action')
       end
     end
     context 'when the user is Engineer' do
       let(:user) { FactoryGirl.create(:engineer) }
       it 'do not allow engineer to create new request' do
         get :new, params: { phase_id: phase.id }
-        expect(flash[:error]).to be_present
+        expect(flash[:error]).to eq('translation missing: en.pundit.You are not authorize to do this action')
       end
     end
   end
@@ -131,7 +133,7 @@ RSpec.describe RequestsController, type: :controller do
       it 'do not allow Manager to create request' do
         request = attributes_for(:request, user_id: user.id)
         post :create, params: { phase_id: phase.id, request: request }
-        expect(flash[:error]).to be_present
+        expect(flash[:error]).to eq('translation missing: en.pundit.You are not authorize to do this action')
       end
     end
     context 'when the user is Engineer' do
@@ -139,7 +141,7 @@ RSpec.describe RequestsController, type: :controller do
       it 'do not allow engineer to create request' do
         request = attributes_for(:request, user_id: user.id)
         post :create, params: { phase_id: phase.id, request: request }
-        expect(flash[:error]).to be_present
+        expect(flash[:error]).to eq('translation missing: en.pundit.You are not authorize to do this action')
       end
     end
   end
@@ -172,7 +174,7 @@ RSpec.describe RequestsController, type: :controller do
       let(:request) { FactoryGirl.create(:request, user_id: user.id, phase_id: phase.id) }
       it 'do not allow Manager to delete request' do
         delete :destroy, params: { phase_id: phase.id, id: request.id }
-        expect(flash[:error]).to be_present
+        expect(flash[:error]).to eq('translation missing: en.pundit.You are not authorize to do this action')
       end
     end
     context 'when the user is Engineer' do
@@ -182,7 +184,7 @@ RSpec.describe RequestsController, type: :controller do
       let(:request) { FactoryGirl.create(:request, user_id: user.id, phase_id: phase.id) }
       it 'do not allow engineer to delete request' do
         delete :destroy, params: { phase_id: phase.id, id: request.id }
-        expect(flash[:error]).to be_present
+        expect(flash[:error]).to eq('translation missing: en.pundit.You are not authorize to do this action')
       end
     end
   end
