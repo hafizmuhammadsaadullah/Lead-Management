@@ -5,17 +5,17 @@ FactoryGirl.define do
     user_name  { Faker::Internet.username}
     email { Faker::Internet.email }
     password  { Faker::Internet.password(min_length: 6) }
-  #   factory :admin do
-  #     after(:create) { |user| user.add_role :admin }
-  #   end
-  #   factory :business_developer do
-  #     after(:create) { |user| user.add_role :business_developer }
-  #   end
-  #   factory :manager do
-  #     after(:create) { |user| user.add_role :manager }
-  #   end
-  #   factory :engineer do
-  #     after(:create) { |user| user.add_role :engineer }
-  #   end
-  # end
+    factory :admin do
+      after(:create) { |user| user.add_role :admin }
+    end
+    factory :business_developer do
+      after(:create) { |user| user.add_role :business_developer }
+    end
+    factory :manager do
+      after(:create) { |user| user.add_role :manager }
+    end
+    factory :engineer do
+      after(:create) { |user| user.add_role :engineer }
+    end
+  end
 end

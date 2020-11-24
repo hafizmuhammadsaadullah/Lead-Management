@@ -47,12 +47,6 @@ gem 'jbuilder', '~> 2.5'
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.1.0', require: false
 
-group :development, :test do
-  gem 'rspec-rails', '~> 4.0.1'
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-end
-
 group :production do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
   gem 'listen', '>= 3.0.5', '< 3.2'
@@ -70,14 +64,13 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 group :test do
-  gem 'shoulda-matchers', '~> 4.0'
+  # Adds support for Capybara system testing and selenium driver
   gem 'faker'
   gem 'rails-controller-testing'
-end
-group :test do
-  # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
+  gem 'shoulda-matchers', '~> 4.0'
+  gem 'simplecov', require: false
   # Easy installation and use of chromedriver to run system tests with Chrome
   gem 'chromedriver-helper'
 end
@@ -86,6 +79,9 @@ end
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 group :development, :test do
   gem 'factory_girl_rails', '~> 4.5'
+  gem 'rspec-rails', '~> 4.0.1'
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rubocop'
   gem 'rubocop-performance'
   gem 'rubocop-rails'

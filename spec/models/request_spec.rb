@@ -7,11 +7,11 @@ RSpec.describe Request, type: :model do
     let(:phase) { FactoryGirl.create(:phase, user_id: user.id, lead_id: lead.id) }
 
     subject { FactoryGirl.create(:request, user_id: user.id, phase_id: phase.id) }
-    describe "Associations" do
+    describe 'Associations' do
       it { should belong_to(:phase) }
       it { should belong_to(:user) }
     end
-    describe "Validations" do
+    describe 'Validations' do
       it { should validate_presence_of(:user_id) }
       it { should validate_presence_of(:description) }
     end

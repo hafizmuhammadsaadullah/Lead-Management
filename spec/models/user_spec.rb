@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   describe '#User' do
     let(:user) { FactoryGirl.create(:user) }
-    describe "Associations" do
+    describe 'Associations' do
       it { should have_one_attached(:image) }
       it { should have_many(:leads).dependent(:destroy) }
       it { should have_many(:phase_users).dependent(:destroy) }
@@ -18,33 +18,35 @@ RSpec.describe User, type: :model do
       it { should validate_presence_of(:last_name) }
       it { should validate_presence_of(:user_name) }
     end
-    describe 'is admin' do
-      let(:user) { FactoryGirl.create(:admin) }
-
-      it do
-        byebug
-        expect(user.admin?).to eql(true) 
+    describe 'Role' do
+      context 'is admin' do
+        let(:user) { FactoryGirl.create(:admin) }
+        it { expect(user.admin?).to eql(true) }
+        it { expect(user.developer?).to eql(false) }
+        it { expect(user.manager?).to eql(false) }
+        it { expect(user.engineer?).to eql(false) }
       end
-      let(:user) { FactoryGirl.create(:manager) }
-      it { expect(user.admin?).to eql(false) }
-    end
-    describe 'is developer' do
-      let(:user) { FactoryGirl.create(:business_developer) }
-      it { expect(user.developer?).to eql(true) }
-      let(:user) { FactoryGirl.create(:manager) }
-      it { expect(user.developer?).to eql(false) }
-    end
-    describe 'is manager' do
-      let(:user) { FactoryGirl.create(:manager) }
-      it { expect(user.manager?).to eql(true) }
-      let(:user) { FactoryGirl.create(:admin) }
-      it { expect(user.manager?).to eql(false) }
-    end
-    describe 'is Engineer' do
-      let(:user) { FactoryGirl.create(:engineer) }
-      it { expect(user.engineer?).to eql(true) }
-      let(:user) { FactoryGirl.create(:admin) }
-      it { expect(user.engineer?).to eql(false) }
+      context 'is business developer' do
+        let(:user) { FactoryGirl.create(:business_developer) }
+        it { expect(user.admin?).to eql(false) }
+        it { expect(user.developer?).to eql(true) }
+        it { expect(user.manager?).to eql(false) }
+        it { expect(user.engineer?).to eql(false) }
+      end
+      context 'is manager' do
+        let(:user) { FactoryGirl.create(:manager) }
+        it { expect(user.admin?).to eql(false) }
+        it { expect(user.developer?).to eql(false) }
+        it { expect(user.manager?).to eql(true) }
+        it { expect(user.engineer?).to eql(false) }
+      end
+      context 'is engineer' do
+        let(:user) { FactoryGirl.create(:engineer) }
+        it { expect(user.admin?).to eql(false) }
+        it { expect(user.developer?).to eql(false) }
+        it { expect(user.manager?).to eql(false) }
+        it { expect(user.engineer?).to eql(true) }
+      end
     end
   end
 end
