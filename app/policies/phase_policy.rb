@@ -7,11 +7,11 @@ class PhasePolicy < ApplicationPolicy
   end
 
   def destroy?
-    user.admin? or  (user.developer? and record.lead.user_id == user.id)
+    user.admin? or (user.developer? and record.lead.user_id == user.id)
   end
 
   def create?
-    user.admin? and  user.developer?
+    user.admin? or  user.developer?
   end
 
   def status?

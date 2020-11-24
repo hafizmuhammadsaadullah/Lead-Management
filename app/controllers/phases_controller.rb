@@ -18,6 +18,7 @@ class PhasesController < ApplicationController
 
   def create
     @phase = @lead.phases.new(phase_params)
+    authorize @phase
     if @phase.save
       redirect_to lead_phase_path(params[:lead_id], @phase.id), notice: 'Phase add successfully'
     else
