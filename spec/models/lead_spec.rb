@@ -52,6 +52,12 @@ RSpec.describe Lead, type: :model do
         expect(subject.save).to eq(false)
         expect(subject.errors.full_messages.to_sentence).to eq("Leadtype can't be blank")
       end
+      let(:user) { FactoryGirl.create(:manager) }
+      it 'is not validate callback' do
+        # lead = Lead.find(9866)
+        subject.update!(is_sale: 'sale')
+        expect(Project.last.nil?).to eq(false)
+      end
     end
   end
 end
