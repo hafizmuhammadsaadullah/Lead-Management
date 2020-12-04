@@ -2,7 +2,8 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.6'
-
+gem  'rack-cors'
+gem 'active_model_serializers'
 gem 'cloudinary', require: true
 gem 'activestorage-cloudinary-service'
 gem 'figaro'

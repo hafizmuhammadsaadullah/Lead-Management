@@ -3,7 +3,7 @@
 module Api
   module V1
     class LeadsController < ActionController::Base
-      # skip_before_action :verify_authenticity_token
+      skip_before_action :verify_authenticity_token
       before_action :set_lead, only: %i[destroy show update]
       # before_action :check_authorization, only: %i[destroy update]
       def index
@@ -34,9 +34,9 @@ module Api
 
       def destroy
         if @lead.destroy
-          render json: {success: 'lead delete successfully'}
+          render json: { success: 'lead delete successfully' }
         else
-          render json: {error: 'lead not delete successfully'}
+          render json: { error: 'lead not delete successfully' }
         end
       end
 
