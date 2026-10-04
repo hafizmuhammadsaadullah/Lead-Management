@@ -1,32 +1,51 @@
-##### Prerequisites
-The setups steps expect following tools installed on the system.
-Ruby [2.6.6]
-Rails [5.2.4.4]
-postgres [13.0 ]
-##### 1. Check out the repository
-```bash
-https://github.com/hafizmuhammadsaadullah/Lead-Management.git
+# Lead Management
+
+Sales CRM for managing leads and sales processes in an organization. It tracks leads, helps allocate technical resources, and automates commission calculations for sales teams.
+
+## Tech stack
+
+- Ruby 2.6.6 and Rails 5.2.4.4
+- PostgreSQL 13
+- RSpec for tests, RuboCop for linting
+
+## Getting started
+
+Prerequisites: Ruby 2.6.6, Rails 5.2.4.4 and PostgreSQL 13.
+
+1. Clone the repository
+
+```sh
+git clone https://github.com/hafizmuhammadsaadullah/Lead-Management.git
+cd Lead-Management
+bundle install
 ```
-##### 2. Create database.yml file
-Copy the sample database.yml file and edit the database configuration as required.
-```bash
+
+2. Create `config/database.yml` from the sample file and edit the database configuration as required
+
+```sh
 cp config/database.yml.sample config/database.yml
 ```
-##### 3. Create and setup the database
-Run the following commands to create and setup the database.
-```ruby
+
+3. Create and set up the database
+
+```sh
 rails db:setup
 rails db:migrate
 rails db:seed
 ```
-##### 4. Start the Rails server
-Change application.yml to set enviroment variable
-```ruby
+
+4. Set the environment variables in `application.yml`
+
+5. Start the Rails server
+
+```sh
 rails s
 ```
-##### 5. Start the Rails server
-You can start the rails server using the command given below.
-```ruby
-rails s
+
+Then open http://localhost:3000
+
+## Running the tests
+
+```sh
+bundle exec rspec
 ```
-And now you can visit the site with the URL http://localhost:3000
